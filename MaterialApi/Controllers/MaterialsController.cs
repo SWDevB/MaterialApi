@@ -44,9 +44,12 @@ namespace MaterialApi.Controllers
 
         // POST api/<MaterialsController>
         [HttpPost]
-        public void Post([FromBody] Material material)
+        public ActionResult<Material> Post([FromBody] Material material)
         {
             _materialService.Add(material);
+            //TODO: create url more reliable
+            var url = string.Concat(this.Request.Scheme, "://", this.Request.Host, this.Request.Path, $"/{material.Id}");
+            return Created(url, material);
         }
 
         // PUT api/<MaterialsController>/5
