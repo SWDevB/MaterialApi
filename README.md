@@ -6,15 +6,17 @@ Basic training project to provide a RESTful API using ASP.NET Core 3.1 and Raven
 ## Goals
 ### Done
 * Implement API using .NET Core 3.1
-* Provide following routes
-  * GET /material/:id 
-  * GET /material?name={name} 
-  * POST /material 
-  * PUT /material 
-  * DELETE /material/:id
+* Provide following routes:
+  * GET /materials/:id 
+  * GET /materials?name={name} 
+  * POST /materials 
+  * PUT /materials
+  * DELETE /materials/:id
+* Provide Swagger 
+* Persist in RavendDB (only unsecured DBs currently)
 
 ### Pending
-* Persist Data using RavenDB
+* Support secured RavenDBs
 * Testing using xUnit 
 
 ### Out of Scope

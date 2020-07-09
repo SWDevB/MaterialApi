@@ -33,9 +33,13 @@ namespace MaterialApi.Controllers
 
         // GET api/<MaterialsController>/5
         [HttpGet("{id}")]
-        public Material GetById(string id)
+        public ActionResult<Material> GetById(string id)
         {
-            return _materialService.GetById(id);
+            var result = _materialService.GetById(id);
+            if (result != null)
+                return Ok(result);
+            else
+                return NotFound();
         }
 
         // POST api/<MaterialsController>
@@ -47,16 +51,22 @@ namespace MaterialApi.Controllers
 
         // PUT api/<MaterialsController>/5
         [HttpPut]
-        public void Put([FromBody] Material material)
+        public ActionResult Put([FromBody] Material material)
         {
-            _materialService.Save(material);
+            if (_materialService.Save(material))
+                return Ok();
+            else
+                return NotFound();
         }
 
         // DELETE api/<MaterialsController>/5
         [HttpDelete("{id}")]
-        public void Delete(string id)
+        public ActionResult Delete(string id)
         {
-            _materialService.Delete(id);
+            if (_materialService.Delete(id))
+                return Ok();
+            else
+                return NotFound();
         }
     }
 }
