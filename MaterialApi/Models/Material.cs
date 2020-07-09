@@ -20,6 +20,7 @@ namespace MaterialApi.Models
         public string Author { get; set; }
         [Required]
         public string Notes { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         [Required]
         public KindOfPhase Phase { get; set; }
     }
