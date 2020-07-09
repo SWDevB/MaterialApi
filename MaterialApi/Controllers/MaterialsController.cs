@@ -46,8 +46,8 @@ namespace MaterialApi.Controllers
         }
 
         // PUT api/<MaterialsController>/5
-        [HttpPut("{id}")]
-        public void Put(string id, [FromBody] Material material)
+        [HttpPut]
+        public void Put([FromBody] Material material)
         {
             _materialService.Save(material);
         }
