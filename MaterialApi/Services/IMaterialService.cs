@@ -8,9 +8,7 @@ namespace MaterialApi.Services
 {
     public interface IMaterialService
     {
-        IEnumerable<Material> Get();
-
-        IEnumerable<Material> GetByPartialName(string name);
+        IEnumerable<Material> Get(string name);
 
         Material GetById(string id);
 

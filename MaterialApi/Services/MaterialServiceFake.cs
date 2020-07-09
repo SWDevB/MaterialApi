@@ -44,9 +44,12 @@ namespace MaterialApi.Services
             return _repository.FirstOrDefault(material => material.Id == id);
         }
 
-        public IEnumerable<Material> GetByPartialName(string name)
+        public IEnumerable<Material> Get(string name)
         {
-            return _repository.Where(material => material.Name.Contains(name));
+            if (!string.IsNullOrEmpty(name))
+                return _repository.Where(material => material.Name.Contains(name, StringComparison.OrdinalIgnoreCase));
+            else
+                return _repository;
         }
 
         public bool Save(Material material)

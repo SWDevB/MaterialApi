@@ -26,14 +26,14 @@ namespace MaterialApi.Controllers
 
         // GET: api/<MaterialsController>
         [HttpGet]
-        public IEnumerable<Material> Get()
+        public IEnumerable<Material> Get([FromQuery] string name)
         {
-            return _materialService.Get();
+            return _materialService.Get(name);
         }
 
         // GET api/<MaterialsController>/5
         [HttpGet("{id}")]
-        public Material Get(string id)
+        public Material GetById(string id)
         {
             return _materialService.GetById(id);
         }
