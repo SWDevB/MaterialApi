@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using MaterialApi.Data;
 using MaterialApi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,7 +33,9 @@ namespace MaterialApi
             {
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
-            services.AddSingleton<IMaterialService, MaterialServiceFake>();
+            services.Configure<DocumentStoreSettings>(Configuration.GetSection("DocumentStore"));
+            services.AddSingleton<IMaterialService, MaterialService>();
+            services.AddSingleton<IDocumentStoreHolder, DocumentStoreHolder>();
             services.AddSwaggerGen();
         }
 

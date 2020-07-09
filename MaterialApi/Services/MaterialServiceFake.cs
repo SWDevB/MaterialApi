@@ -47,7 +47,7 @@ namespace MaterialApi.Services
         public IEnumerable<Material> Get(string name)
         {
             if (!string.IsNullOrEmpty(name))
-                return _repository.Where(material => material.Name.Contains(name, StringComparison.OrdinalIgnoreCase));
+                return _repository.Where(material => material.Name.StartsWith(name, StringComparison.OrdinalIgnoreCase));
             else
                 return _repository;
         }
