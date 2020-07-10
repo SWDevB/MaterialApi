@@ -44,16 +44,17 @@ namespace MaterialApi.Controllers
 
         // POST api/<MaterialsController>
         [HttpPost]
-        public void Post([FromBody] Material material)
+        public Material Post([FromBody] Material material)
         {
             _materialService.Add(material);
+            return material;
         }
 
         // PUT api/<MaterialsController>/5
         [HttpPut]
         public ActionResult Put([FromBody] Material material)
         {
-            if (_materialService.Save(material))
+            if (_materialService.Update(material))
                 return Ok();
             else
                 return NotFound();

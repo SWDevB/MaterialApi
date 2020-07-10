@@ -9,6 +9,15 @@
     }
   },
     "profiles": {
+        "Swagger": {
+            "commandName": "Project",
+            "launchBrowser": true,
+            "launchUrl": "swagger",
+            "applicationUrl": "https://localhost:5001;http://localhost:5000",
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            }
+        },
         "IIS Express": {
             "commandName": "IISExpress",
             "launchBrowser": true,
@@ -21,15 +30,6 @@
             "commandName": "Project",
             "launchBrowser": true,
             "launchUrl": "materials",
-            "applicationUrl": "https://localhost:5001;http://localhost:5000",
-            "environmentVariables": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            }
-        },
-        "Swagger": {
-            "commandName": "Project",
-            "launchBrowser": true,
-            "launchUrl": "swagger",
             "applicationUrl": "https://localhost:5001;http://localhost:5000",
             "environmentVariables": {
                 "ASPNETCORE_ENVIRONMENT": "Development"

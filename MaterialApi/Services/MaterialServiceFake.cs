@@ -7,58 +7,75 @@ using System.Threading.Tasks;
 
 namespace MaterialApi.Services
 {
+    /// <summary>
+    /// Fake Service to access Materials without persisting Data
+    /// </summary>
     public class MaterialServiceFake : IMaterialService
     {
-        List<Material> _repository = new List<Material>();
+        /// <summary>
+        /// Repository is public to enable tests to check it without using the tested code
+        /// </summary>
+        public List<Material> Repository { get; private set; }
 
-        public MaterialServiceFake()
+        public MaterialServiceFake(bool addInitialData = true)
         {
-            _repository.Add(new Material { Author = "Admin", Hidden = false, Id = Guid.NewGuid().ToString(), Name = "Water", Notes = "Most common fluid", Phase = KindOfPhase.Continuous });
-            _repository.Add(new Material { Author = "Admin", Hidden = false, Id = Guid.NewGuid().ToString(), Name = "Mercury", Notes = "More poisonous fluid", Phase = KindOfPhase.Continuous });
+            Repository = new List<Material>();
+
+            if (addInitialData)
+            {
+                Repository.Add(new Material { Author = "Admin", Hidden = false, Id = Guid.NewGuid().ToString(), Name = "Water", Notes = "Most common fluid", Phase = KindOfPhase.Continuous });
+                Repository.Add(new Material { Author = "Admin", Hidden = false, Id = Guid.NewGuid().ToString(), Name = "Mercury", Notes = "Poisonous fluid", Phase = KindOfPhase.Continuous });
+            }
         }
 
         public Material Add(Material material)
         {
             material.Id = Guid.NewGuid().ToString();
-            _repository.Add(material);
+            Repository.Add(material);
             return material;
         }
 
         public bool Delete(string id)
         {
             bool result = false;
-            Material materialToDelete = _repository.FirstOrDefault(material => material.Id == id);
-            if (materialToDelete != null)    
-                _repository.Remove(materialToDelete);
-
+            Material materialToDelete = Repository.FirstOrDefault(material => material.Id == id);
+            if (materialToDelete != null)
+            {
+                Repository.Remove(materialToDelete);
+                result = true;
+            }
+                
             return result;
         }
 
         public IEnumerable<Material> Get()
         {
-            return _repository;
+            return Repository;
         }
 
         public Material GetById(string id)
         {
-            return _repository.FirstOrDefault(material => material.Id == id);
+            return Repository.FirstOrDefault(material => material.Id == id);
         }
 
-        public IEnumerable<Material> Get(string name)
+        public IEnumerable<Material> Get(string nameStartsWith)
         {
-            if (!string.IsNullOrEmpty(name))
-                return _repository.Where(material => material.Name.StartsWith(name, StringComparison.OrdinalIgnoreCase));
+            if (!string.IsNullOrEmpty(nameStartsWith))
+                return Repository.Where(material => material.Name.StartsWith(nameStartsWith, StringComparison.OrdinalIgnoreCase));
             else
-                return _repository;
+                return Repository;
         }
 
-        public bool Save(Material material)
+        public bool Update(Material material)
         {
             bool result = false;
-            int indexToReplace = _repository.FindIndex(materialToReplace => materialToReplace.Id == material.Id);
+            int indexToReplace = Repository.FindIndex(materialToReplace => materialToReplace.Id == material.Id);
             if (indexToReplace > -1)
-                _repository[indexToReplace] = material;
-  
+            {
+                Repository[indexToReplace] = material;
+                result = true;
+            }
+                
             return result;
         }
     }
