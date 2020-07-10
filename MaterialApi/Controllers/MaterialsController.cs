@@ -56,7 +56,7 @@ namespace MaterialApi.Controllers
         [HttpPut]
         public ActionResult Put([FromBody] Material material)
         {
-            if (_materialService.Save(material))
+            if (_materialService.Update(material))
                 return Ok();
             else
                 return NotFound();

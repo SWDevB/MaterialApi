@@ -29,14 +29,21 @@ namespace MaterialApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<DocumentStoreSettings>(Configuration.GetSection("DocumentStore"));
+
+            //to run the API without RavendDB use the commented line instead
+            services.AddSingleton<IMaterialService, MaterialService>();
+            //services.AddSingleton<IMaterialService, MaterialServiceFake>();
+
+            services.AddSingleton<IDocumentStoreHolder, DocumentStoreHolder>();
+
+            services.AddSwaggerGen();
+
+            //Enable enums as Strings
             services.AddControllers().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
-            services.Configure<DocumentStoreSettings>(Configuration.GetSection("DocumentStore"));
-            services.AddSingleton<IMaterialService, MaterialService>();
-            services.AddSingleton<IDocumentStoreHolder, DocumentStoreHolder>();
-            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

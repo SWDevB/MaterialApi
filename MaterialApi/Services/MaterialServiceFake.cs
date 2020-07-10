@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace MaterialApi.Services
 {
+    /// <summary>
+    /// Fake Service to access Materials without persisting Data
+    /// </summary>
     public class MaterialServiceFake : IMaterialService
     {
         List<Material> _repository = new List<Material>();
@@ -28,9 +31,12 @@ namespace MaterialApi.Services
         {
             bool result = false;
             Material materialToDelete = _repository.FirstOrDefault(material => material.Id == id);
-            if (materialToDelete != null)    
+            if (materialToDelete != null)
+            {
                 _repository.Remove(materialToDelete);
-
+                result = true;
+            }
+                
             return result;
         }
 
@@ -44,21 +50,24 @@ namespace MaterialApi.Services
             return _repository.FirstOrDefault(material => material.Id == id);
         }
 
-        public IEnumerable<Material> Get(string name)
+        public IEnumerable<Material> Get(string nameStartsWith)
         {
-            if (!string.IsNullOrEmpty(name))
-                return _repository.Where(material => material.Name.StartsWith(name, StringComparison.OrdinalIgnoreCase));
+            if (!string.IsNullOrEmpty(nameStartsWith))
+                return _repository.Where(material => material.Name.StartsWith(nameStartsWith, StringComparison.OrdinalIgnoreCase));
             else
                 return _repository;
         }
 
-        public bool Save(Material material)
+        public bool Update(Material material)
         {
             bool result = false;
             int indexToReplace = _repository.FindIndex(materialToReplace => materialToReplace.Id == material.Id);
             if (indexToReplace > -1)
+            {
                 _repository[indexToReplace] = material;
-  
+                result = true;
+            }
+                
             return result;
         }
     }

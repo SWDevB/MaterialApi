@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace MaterialApi.Services
 {
+    /// <summary>
+    /// Service to access Materials
+    /// </summary>
     public class MaterialService : IMaterialService
     {
         IDocumentStore _documentStore;
@@ -46,15 +49,15 @@ namespace MaterialApi.Services
             return result;
         }
 
-        public IEnumerable<Material> Get(string name)
+        public IEnumerable<Material> Get(string nameStartsWith)
         {
             List<Material> result;
 
             using (IDocumentSession session = _documentStore.OpenSession())
             {
-                if (!string.IsNullOrEmpty(name))
+                if (!string.IsNullOrEmpty(nameStartsWith))
                     result = session.Query<Material>()
-                        .Where(material => material.Name.StartsWith(name, StringComparison.OrdinalIgnoreCase))
+                        .Where(material => material.Name.StartsWith(nameStartsWith, StringComparison.OrdinalIgnoreCase))
                         .OrderBy(material => material.Name)
                         .ToList();
                 else
@@ -80,7 +83,7 @@ namespace MaterialApi.Services
             return result;
         }
 
-        public bool Save(Material material)
+        public bool Update(Material material)
         {
             bool result = false;
             using (IDocumentSession session = _documentStore.OpenSession())
