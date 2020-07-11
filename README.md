@@ -19,7 +19,7 @@ The project provides a RESTful API to store, change and request materials.
 * Exemplary Unit Tests using xUnit
 
 ### Out of Scope
-The here mentioned things are currently out of scope because my main focus is to get some experience in using ASP.NET Core and RavenDB. But of cf course they would increase the quality of the API and I tackle them later
+The here mentioned things are currently out of scope because my main focus is to get some experience in using ASP.NET Core and RavenDB. But of cf course they would increase the quality of the API and I might tackle them later
 * Authentication
 * Additional repository layer between service and database access
 * Filtering for all properties instead of the currently provided simple name only filter
