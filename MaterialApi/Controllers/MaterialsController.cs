@@ -36,7 +36,7 @@ namespace MaterialApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Eexception occured on GET (name: {name}", name);
+                _logger.LogError(ex, $"Eexception occured on GET (name: {name}");
                 return Problem("Error Occured");
             }
         }
@@ -58,7 +58,7 @@ namespace MaterialApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Eexception occured on GET (id: {id}", id);
+                _logger.LogError(ex, $"Eexception occured on GET (id: {id}");
                 return Problem("Error Occured");
             }
         }
