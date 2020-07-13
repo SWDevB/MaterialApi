@@ -17,11 +17,14 @@ The project provides a RESTful API to store, change and request materials.
   * Unsecured Database
   * Secured Database (using certificate only)
 * Exemplary Unit Tests using xUnit
+* Basic Exception Handling
+* Basic Logging 
 
 ### Out of Scope
 The here mentioned things are currently out of scope because my main focus is to get some experience in using ASP.NET Core and RavenDB. But of cf course they would increase the quality of the API and I might tackle them later
 * Authentication
 * Additional repository layer between service and database access
+* Async processing 
 * Filtering for all properties instead of the currently provided simple name only filter
 * Additional Unit and Integration tests
 * Additional Exception handling and logging
