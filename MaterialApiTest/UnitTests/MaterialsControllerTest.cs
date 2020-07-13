@@ -3,8 +3,11 @@ using MaterialApi.Models;
 using MaterialApi.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Logging;
+using Moq;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -13,27 +16,31 @@ namespace MaterialApiTest
     public class MaterialsControllerTest
     {
         [Fact]
-        public void GetWithoutNameEmpty()
+        public void GetWithoutNameEmpty200()
         {
             var materialServiceFake = new MaterialServiceFake(false);
             var materialsController = new MaterialsController(materialServiceFake, null);
 
             var result = materialsController.Get(null);
-            Assert.Empty(result);
+            Assert.IsType<OkObjectResult>(result.Result);
+            Assert.NotNull(((OkObjectResult)result.Result).Value);
+            Assert.Empty((IEnumerable<Material>)((OkObjectResult)result.Result).Value);
         }
 
         [Fact]
-        public void GetWithNameEmpty()
+        public void GetWithNameEmpty200()
         {
             var materialServiceFake = new MaterialServiceFake(false);
             var materialsController = new MaterialsController(materialServiceFake, null);
 
             var result = materialsController.Get("name");
-            Assert.Empty(result);
+            Assert.IsType<OkObjectResult>(result.Result);
+            Assert.NotNull(((OkObjectResult)result.Result).Value);
+            Assert.Empty((IEnumerable<Material>)((OkObjectResult)result.Result).Value);
         }
 
         [Fact]
-        public void GetWithoutName()
+        public void GetWithoutName200()
         {
             var materialServiceFake = new MaterialServiceFake(false);
             var materialsController = new MaterialsController(materialServiceFake, null);
@@ -74,11 +81,14 @@ namespace MaterialApiTest
             #endregion
 
             var result = materialsController.Get(null);
-            Assert.Equal(3, result.Count());
+
+            Assert.IsType<OkObjectResult>(result.Result);
+            Assert.NotNull(((OkObjectResult)result.Result).Value);
+            Assert.Equal(3, ((IEnumerable<Material>)((OkObjectResult)result.Result).Value).Count());
         }
 
         [Fact]
-        public void GetWithName()
+        public void GetWithName200()
         {
             var materialServiceFake = new MaterialServiceFake(false);
             var materialsController = new MaterialsController(materialServiceFake, null);
@@ -119,7 +129,9 @@ namespace MaterialApiTest
             #endregion
 
             var result = materialsController.Get("name");
-            Assert.Equal(2, result.Count());
+            Assert.IsType<OkObjectResult>(result.Result);
+            Assert.NotNull(((OkObjectResult)result.Result).Value);
+            Assert.Equal(2, ((IEnumerable<Material>)((OkObjectResult)result.Result).Value).Count());
         }
 
         [Fact]
@@ -159,7 +171,7 @@ namespace MaterialApiTest
         }
 
         [Fact]
-        public void Post()
+        public void Post200()
         {
             var materialServiceFake = new MaterialServiceFake(false);
             var materialsController = new MaterialsController(materialServiceFake, null);
@@ -175,9 +187,10 @@ namespace MaterialApiTest
             };
 
             var result = materialsController.Post(material);
-            Assert.NotNull(result);
+            Assert.IsType<OkObjectResult>(result.Result);
+            Assert.NotNull(((OkObjectResult)result.Result).Value);
             Assert.Single(materialServiceFake.Repository);
-            Assert.NotEqual("Random", result.Id);
+            Assert.NotEqual("Random", ((Material)((OkObjectResult)result.Result).Value).Id);
         }
 
         [Fact]
@@ -274,6 +287,41 @@ namespace MaterialApiTest
             Assert.IsType<OkResult>(result);
             //this actually tests the service fake, not the Controller
             Assert.Empty(materialServiceFake.Repository);
+        }
+
+        [Fact]
+        public void DeleteResult500()
+        {
+            var materialServiceMock = new Mock<IMaterialService>();
+            materialServiceMock
+                .Setup(m => m.Delete(It.IsAny<string>()))
+                .Throws<System.Exception>();
+
+            var loggerMock = new Mock<ILogger<MaterialsController>>();
+
+            var materialsController = new MaterialsController(materialServiceMock.Object, loggerMock.Object);
+            materialsController.ProblemDetailsFactory = GetProblemsDetailsFactoryMock().Object;
+            var result = materialsController.Delete("1");
+
+            //Assert.IsType<>(result);
+        }
+
+        private Mock<ProblemDetailsFactory> GetProblemsDetailsFactoryMock()
+        {
+            var problemDetails = new ProblemDetails();
+            var mock = new Mock<ProblemDetailsFactory>();
+            mock
+                .Setup(_ => _.CreateProblemDetails(
+                    It.IsAny<HttpContext>(),
+                    It.IsAny<int?>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>())
+                )
+                .Returns(problemDetails);
+
+            return mock;
         }
     }
 }

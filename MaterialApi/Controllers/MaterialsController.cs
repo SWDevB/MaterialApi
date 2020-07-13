@@ -26,48 +26,101 @@ namespace MaterialApi.Controllers
 
         // GET: api/<MaterialsController>
         [HttpGet]
-        public IEnumerable<Material> Get([FromQuery] string name)
+        [ProducesResponseType(typeof(IEnumerable<Material>), 200)]
+        [ProducesResponseType(500)]
+        public ActionResult<IEnumerable<Material>> Get([FromQuery] string name)
         {
-            return _materialService.Get(name);
+            try
+            {
+                return Ok(_materialService.Get(name));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Eexception occured on GET (name: {name}", name);
+                return Problem("Error Occured");
+            }
         }
 
         // GET api/<MaterialsController>/5
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(Material), 200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public ActionResult<Material> GetById(string id)
         {
-            var result = _materialService.GetById(id);
-            if (result != null)
-                return Ok(result);
-            else
-                return NotFound();
+            try
+            {
+                var result = _materialService.GetById(id);
+                if (result != null)
+                    return Ok(result);
+                else
+                    return NotFound();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Eexception occured on GET (id: {id}", id);
+                return Problem("Error Occured");
+            }
         }
 
         // POST api/<MaterialsController>
         [HttpPost]
-        public Material Post([FromBody] Material material)
+        [ProducesResponseType(typeof(Material), 200)]
+        [ProducesResponseType(500)]
+        public ActionResult<Material> Post([FromBody] Material material)
         {
-            _materialService.Add(material);
-            return material;
+            try
+            {
+                _materialService.Add(material);
+                return Ok(material);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Eexception occured on POST");
+                return Problem("Error Occured");
+            }
         }
 
         // PUT api/<MaterialsController>/5
         [HttpPut]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public ActionResult Put([FromBody] Material material)
         {
-            if (_materialService.Update(material))
-                return Ok();
-            else
-                return NotFound();
+            try
+            {
+                if (_materialService.Update(material))
+                    return Ok();
+                else
+                    return NotFound();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Eexception occured on PUT");
+                return Problem("Error Occured");
+            }
         }
 
         // DELETE api/<MaterialsController>/5
         [HttpDelete("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public ActionResult Delete(string id)
         {
-            if (_materialService.Delete(id))
+            try
+            {
+                if (_materialService.Delete(id))
                 return Ok();
             else
                 return NotFound();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Eexception occured on DELETE");
+                return Problem("Error Occured");
+            }
         }
     }
 }
