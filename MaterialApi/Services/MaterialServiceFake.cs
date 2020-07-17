@@ -68,6 +68,9 @@ namespace MaterialApi.Services
 
         public bool Update(Material material)
         {
+            if (string.IsNullOrEmpty(material?.Id))
+                throw new ArgumentException("Material Id not set");
+
             bool result = false;
             int indexToReplace = Repository.FindIndex(materialToReplace => materialToReplace.Id == material.Id);
             if (indexToReplace > -1)

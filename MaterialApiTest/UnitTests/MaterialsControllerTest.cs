@@ -259,6 +259,27 @@ namespace MaterialApiTest
         }
 
         [Fact]
+        public void PutResult400()
+        {
+            var materialServiceFake = new MaterialServiceFake(false);
+            var loggerMock = new Mock<ILogger<MaterialsController>>();
+            var materialsController = new MaterialsController(materialServiceFake, loggerMock.Object);
+
+            Material material = new Material
+            {
+                Id = null,
+                Author = "Author",
+                Hidden = false,
+                Name = "Name",
+                Notes = "Notes",
+                Phase = KindOfPhase.Continuous
+            };
+
+            var result = materialsController.Put(material);
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
         public void PutResult404()
         {
             var materialServiceFake = new MaterialServiceFake(false);

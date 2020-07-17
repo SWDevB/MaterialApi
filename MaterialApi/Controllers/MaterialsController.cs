@@ -36,7 +36,7 @@ namespace MaterialApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Eexception occured on GET (name: {name}");
+                _logger.LogError(ex, $"Exception occured on GET (name: {name}");
                 return Problem("Error Occured");
             }
         }
@@ -58,7 +58,7 @@ namespace MaterialApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Eexception occured on GET (id: {id}");
+                _logger.LogError(ex, $"Exception occured on GET (id: {id}");
                 return Problem("Error Occured");
             }
         }
@@ -76,7 +76,7 @@ namespace MaterialApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Eexception occured on POST");
+                _logger.LogError(ex, $"Exception occured on POST");
                 return Problem("Error Occured");
             }
         }
@@ -84,6 +84,7 @@ namespace MaterialApi.Controllers
         // PUT api/<MaterialsController>/5
         [HttpPut]
         [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         public ActionResult Put([FromBody] Material material)
@@ -95,9 +96,14 @@ namespace MaterialApi.Controllers
                 else
                     return NotFound();
             }
+            catch (ArgumentException aex)
+            {
+                _logger.LogError(aex, $"ArgumentException occured on PUT");
+                return BadRequest(aex.Message);
+            }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Eexception occured on PUT");
+                _logger.LogError(ex, $"Exception occured on PUT");
                 return Problem("Error Occured");
             }
         }
@@ -118,7 +124,7 @@ namespace MaterialApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Eexception occured on DELETE");
+                _logger.LogError(ex, $"Exception occured on DELETE");
                 return Problem("Error Occured");
             }
         }
