@@ -85,6 +85,9 @@ namespace MaterialApi.Services
 
         public bool Update(Material material)
         {
+            if (string.IsNullOrEmpty(material?.Id))
+                throw new ArgumentException("Material Id not set");
+
             bool result = false;
             using (IDocumentSession session = _documentStore.OpenSession())
             {
