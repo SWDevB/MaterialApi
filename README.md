@@ -34,7 +34,22 @@ The here mentioned things are currently out of scope because my main focus is to
 The API includes Swagger as documentation and basic test possibility. It provides basic descriptions and example JSON objects for all provided endpoints. It is also possibility to easily call the endpoints for manually testing there. To open Swagger UI open route `\swagger` or just use the respective launch profile which will open it immediately
 
 ### RavenDB
-This project expects a RavenDB database to persist data. In the appsettings.json (or appsettings.Development.json) you can provide the needed configuration, for unsecured databases just provide an url and a database. For secured access you additionally must provide a path to the client certificate provided by RavenDB. 
+This project expects a RavenDB database to persist data. In the appsettings.json (or appsettings.Development.json) you can provide the needed configuration, for unsecured databases just provide an url and a database. 
+
+```
+    "DocumentStore": {
+        "Url": "http://yourRavenDB:Port",
+        "Database": "DatabaseName"
+    }
+```
+For secured access you additionally must provide a path to the client certificate provided by RavenDB. 
+```
+    "DocumentStore": {
+        "Url": "https://yourRavenDB:Port",
+        "Database": "DatabaseName",
+        "PathToCertificate": "../yourClientCertificate.pfx"
+    }
+```
 
 ### In Memory
 If you want to run this without a ravenDB, you can switch the comment for the following lines in the Startup.cs 

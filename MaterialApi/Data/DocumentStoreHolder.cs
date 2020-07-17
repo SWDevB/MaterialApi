@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Raven.Client.Documents;
 using System;
 using System.Collections.Generic;
@@ -14,21 +15,28 @@ namespace MaterialApi.Data
     /// </summary>
     public class DocumentStoreHolder : IDocumentStoreHolder
     {
-        public DocumentStoreHolder(IOptions<DocumentStoreSettings> documentStoreSettings)
+        public DocumentStoreHolder(IOptions<DocumentStoreSettings> documentStoreSettings, ILogger<DocumentStoreHolder> logger)
         {
-            var settings = documentStoreSettings.Value;
-            X509Certificate2 clientCertificate = null;
-
-            if (!string.IsNullOrEmpty(settings.PathToCertificate))
-                clientCertificate = new X509Certificate2(settings.PathToCertificate);
-
-            Store = new DocumentStore
+            try
             {
-                Urls = new[] { settings.Url },
-                Database = settings.Database,
-                Certificate = clientCertificate
+                var settings = documentStoreSettings.Value;
+                X509Certificate2 clientCertificate = null;
 
-            }.Initialize();
+                if (!string.IsNullOrEmpty(settings.PathToCertificate))
+                    clientCertificate = new X509Certificate2(settings.PathToCertificate);
+
+                Store = new DocumentStore
+                {
+                    Urls = new[] { settings.Url },
+                    Database = settings.Database,
+                    Certificate = clientCertificate
+
+                }.Initialize();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error Occured during DocumentStoreHolder creation!");
+            }
         }
 
         public IDocumentStore Store { get; }
