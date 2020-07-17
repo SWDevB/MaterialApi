@@ -7,8 +7,6 @@ using MaterialApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace MaterialApi.Controllers
 {
     [Route("[controller]")]
@@ -24,7 +22,7 @@ namespace MaterialApi.Controllers
             _logger = logger;
         }
 
-        // GET: api/<MaterialsController>
+        // GET: Materials
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<Material>), 200)]
         [ProducesResponseType(500)]
@@ -41,7 +39,7 @@ namespace MaterialApi.Controllers
             }
         }
 
-        // GET api/<MaterialsController>/5
+        // GET Materials/5
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(Material), 200)]
         [ProducesResponseType(404)]
@@ -63,7 +61,7 @@ namespace MaterialApi.Controllers
             }
         }
 
-        // POST api/<MaterialsController>
+        // POST Materials
         [HttpPost]
         [ProducesResponseType(typeof(Material), 200)]
         [ProducesResponseType(500)]
@@ -81,7 +79,7 @@ namespace MaterialApi.Controllers
             }
         }
 
-        // PUT api/<MaterialsController>/5
+        // PUT Materials
         [HttpPut]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
@@ -108,7 +106,7 @@ namespace MaterialApi.Controllers
             }
         }
 
-        // DELETE api/<MaterialsController>/5
+        // DELETE Materials/5
         [HttpDelete("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
