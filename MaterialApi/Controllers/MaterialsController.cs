@@ -26,11 +26,11 @@ namespace MaterialApi.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<Material>), 200)]
         [ProducesResponseType(500)]
-        public ActionResult<IEnumerable<Material>> Get([FromQuery] string name)
+        public async Task<ActionResult<IEnumerable<Material>>> GetAsync([FromQuery] string name)
         {
             try
             {
-                return Ok(_materialService.Get(name));
+                return Ok(await _materialService.GetAsync(name));
             }
             catch (Exception ex)
             {
@@ -44,11 +44,11 @@ namespace MaterialApi.Controllers
         [ProducesResponseType(typeof(Material), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public ActionResult<Material> GetById(string id)
+        public async Task<ActionResult<Material>> GetByIdAsync(string id)
         {
             try
             {
-                var result = _materialService.GetById(id);
+                var result = await _materialService.GetByIdAsync(id);
                 if (result != null)
                     return Ok(result);
                 else
@@ -65,11 +65,11 @@ namespace MaterialApi.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(Material), 200)]
         [ProducesResponseType(500)]
-        public ActionResult<Material> Post([FromBody] Material material)
+        public async Task<ActionResult<Material>> PostAsync([FromBody] Material material)
         {
             try
             {
-                _materialService.Add(material);
+                await _materialService.AddAsync(material);
                 return Ok(material);
             }
             catch (Exception ex)
@@ -85,11 +85,11 @@ namespace MaterialApi.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public ActionResult Put([FromBody] Material material)
+        public async Task<ActionResult> PutAsync([FromBody] Material material)
         {
             try
             {
-                if (_materialService.Update(material))
+                if (await _materialService.UpdateAsync(material))
                     return Ok();
                 else
                     return NotFound();
@@ -111,11 +111,11 @@ namespace MaterialApi.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public ActionResult Delete(string id)
+        public async Task<ActionResult> DeleteAsync(string id)
         {
             try
             {
-                if (_materialService.Delete(id))
+                if (await _materialService.DeleteAsync(id))
                 return Ok();
             else
                 return NotFound();
