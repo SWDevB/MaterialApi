@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace MaterialApi.Services
@@ -28,6 +29,8 @@ namespace MaterialApi.Services
             }
         }
 
+        #region synchronous
+
         public Material Add(Material material)
         {
             material.Id = Guid.NewGuid().ToString();
@@ -44,7 +47,7 @@ namespace MaterialApi.Services
                 Repository.Remove(materialToDelete);
                 result = true;
             }
-                
+
             return result;
         }
 
@@ -78,8 +81,39 @@ namespace MaterialApi.Services
                 Repository[indexToReplace] = material;
                 result = true;
             }
-                
+
             return result;
         }
+
+        #endregion
+
+        #region asynchronous
+
+        public Task<IEnumerable<Material>> GetAsync(string nameStartsWith)
+        {
+            return Task.FromResult(Get(nameStartsWith));
+        }
+
+        public Task<Material> GetByIdAsync(string id)
+        {
+            return Task.FromResult(GetById(id));
+        }
+
+        public Task<Material> AddAsync(Material material)
+        {
+            return Task.FromResult(Add(material));
+        }
+
+        public Task<bool> UpdateAsync(Material material)
+        {
+            return Task.FromResult(Update(material));
+        }
+
+        public Task<bool> DeleteAsync(string id)
+        {
+            return Task.FromResult(Delete(id));
+        }
+
+        #endregion
     }
 }

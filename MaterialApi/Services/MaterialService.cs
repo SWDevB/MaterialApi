@@ -20,6 +20,8 @@ namespace MaterialApi.Services
             _documentStore = storeHolder.Store;
         }
 
+        #region synchronous
+
         public Material Add(Material material)
         {
             using (IDocumentSession session = _documentStore.OpenSession())
@@ -71,16 +73,12 @@ namespace MaterialApi.Services
 
         public Material GetById(string id)
         {
-            Material result;
-
             using (IDocumentSession session = _documentStore.OpenSession())
             {
-                result = session.Query<Material>()
+                return session.Query<Material>()
                     .Where(material => material.Id == id)
                     .FirstOrDefault();
             }
-
-            return result;
         }
 
         public bool Update(Material material)
@@ -102,5 +100,90 @@ namespace MaterialApi.Services
 
             return result;
         }
+
+        #endregion synchronous
+
+        #region asynchronous
+
+        public async Task<Material> AddAsync(Material material)
+        {
+            using (IAsyncDocumentSession session = _documentStore.OpenAsyncSession())
+            {
+                //this way RavenDB creates a GUID as ID
+                material.Id = string.Empty;
+                await session.StoreAsync(material);
+                await session.SaveChangesAsync();
+                return material;
+            }
+        }
+
+        public async Task<bool> DeleteAsync(string id)
+        {
+            bool result = false;
+            using (IAsyncDocumentSession session = _documentStore.OpenAsyncSession())
+            {
+                bool exists = await session.Advanced.ExistsAsync(id);
+                if (exists)
+                {
+                    session.Delete(id);
+                    await session.SaveChangesAsync();
+                    result = true;
+                }
+            }
+
+            return result;
+        }
+
+        public async Task<IEnumerable<Material>> GetAsync(string nameStartsWith)
+        {
+            List<Material> result;
+
+            using (IAsyncDocumentSession session = _documentStore.OpenAsyncSession())
+            {
+                if (!string.IsNullOrEmpty(nameStartsWith))
+                    result = await session.Query<Material>()
+                        .Where(material => material.Name.StartsWith(nameStartsWith, StringComparison.OrdinalIgnoreCase))
+                        .OrderBy(material => material.Name)
+                        .ToListAsync();
+                else
+                    result = await session.Query<Material>()
+                        .OrderBy(material => material.Name)
+                        .ToListAsync();
+            }
+
+            return result;
+        }
+
+        public async Task<Material> GetByIdAsync(string id)
+        {
+            using (IAsyncDocumentSession session = _documentStore.OpenAsyncSession())
+            {
+                return await session.Query<Material>()
+                    .Where(material => material.Id == id)
+                    .FirstOrDefaultAsync();
+            }
+        }
+
+        public async Task<bool> UpdateAsync(Material material)
+        {
+            if (string.IsNullOrEmpty(material?.Id))
+                throw new ArgumentException("Material Id not set");
+
+            bool result = false;
+            using (IAsyncDocumentSession session = _documentStore.OpenAsyncSession())
+            {
+                bool exists = await session.Advanced.ExistsAsync(material.Id);
+                if (exists)
+                {
+                    await session.StoreAsync(material);
+                    await session.SaveChangesAsync();
+                    result = true;
+                }
+            }
+
+            return result;
+        }
+
+        #endregion
     }
 }

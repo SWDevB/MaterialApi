@@ -20,5 +20,15 @@ namespace MaterialApi.Services
         bool Update(Material material);
 
         bool Delete(string id);
+
+        Task<IEnumerable<Material>> GetAsync(string nameStartsWith);
+
+        Task<Material> GetByIdAsync(string id);
+
+        Task<Material> AddAsync(Material material);
+
+        Task<bool> UpdateAsync(Material material);
+
+        Task<bool> DeleteAsync(string id);
     }
 }
