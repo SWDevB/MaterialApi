@@ -1,4 +1,4 @@
-﻿using MaterialApi.Data;
+﻿using MaterialApi.Configuration;
 using MaterialApi.Models;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Session;

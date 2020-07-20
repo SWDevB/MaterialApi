@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Threading.Tasks;
 
-namespace MaterialApi.Data
+namespace MaterialApi.Configuration
 {
     /// <summary>
     /// Interface for providing the RavendDB DocumentStore to access the Database

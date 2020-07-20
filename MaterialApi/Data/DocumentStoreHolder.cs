@@ -8,7 +8,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
-namespace MaterialApi.Data
+namespace MaterialApi.Configuration
 {
     /// <summary>
     /// This class provides the RavendDB DocumentStore to access the Database

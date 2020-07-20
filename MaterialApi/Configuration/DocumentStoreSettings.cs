@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MaterialApi.Data
+namespace MaterialApi.Configuration
 {
     /// <summary>
     /// Settings for RavenDB connection

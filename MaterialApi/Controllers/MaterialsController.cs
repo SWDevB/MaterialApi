@@ -6,6 +6,7 @@ using MaterialApi.Services;
 using MaterialApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MaterialApi.Controllers
 {
@@ -23,6 +24,7 @@ namespace MaterialApi.Controllers
         }
 
         // GET: Materials
+        [Authorize]
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<Material>), 200)]
         [ProducesResponseType(500)]
